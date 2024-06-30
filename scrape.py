@@ -1,4 +1,5 @@
 import requests
+import time
 
 def scrape(book_number, start_index, end_index, data):
     flag = 0
@@ -11,7 +12,7 @@ def scrape(book_number, start_index, end_index, data):
                 response = res.json() 
                 for j in range(0, len(response)):
                     if response[j]['content_level'] == 'Z' or response[j]['content_level'] == 'S':
-                        data += response[j]['ko'].replace("<span>", "(").replace("</span>", ")").replace("\n", "") + "\n"
+                        data += response[j]['ko'].replace(r"<span[^>]*>", "(").replace("</span>", ")").replace("\n", "") + "\n"
                         flag += 1
                 print("https://mediclassics.kr/books/8/volume/" + str(book_number) + "/content?up_content_seq=" + str(i) + " scrape complete\nCurrent Progress: " + str(i) + "/" + str(end_index))
         else:
@@ -20,7 +21,8 @@ def scrape(book_number, start_index, end_index, data):
     return data
 
 def main():
-    data = scrape(1, 136, 1244, "")
+    start_time = time.time()
+    data = scrape(1, 132, 1244, "")
     data = scrape(2, 2, 1410, data)
     data = scrape(3, 2, 1774, data)
     data = scrape(4, 2, 1486, data)
@@ -44,7 +46,9 @@ def main():
     data = scrape(22, 2, 1587, data)
     data = scrape(23, 2, 1755, data)
     # data를 텍스트 파일로 저장
-    with open("dongui_bogam.txt", "w", encoding="utf-8") as f:
-        f.write(data)
-
-main()
+    with open("dongui-bogam.txt", "w", encoding="utf-8") as f:
+        f.write(data.rstrip()) # 끝에 있는 \n 제거
+    print("Total spend time: "+str(round(time.time()-start_time, 2))+"sec") # 리눅스 호환성을 위해 영어로 출력
+    
+if __name__ == '__main__':
+    main()
