@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>동의보감</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .search-container {
+            position: relative;
+            width: 80%;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+        .search-box {
+            width: 80vw;
+            height: 50px;
+            font-size: 18px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 50px;
+        }
+        .submit-button {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            height: 30px;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            border: none;
+            border-radius: 30px;
+            background: #ccc;
+            cursor: pointer;
+        }
+        .output {
+            background: white;
+            border: 1px solid;
+            border-radius: 8px;
+			display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" class="search-box" placeholder="동의보감에서 찾고 싶은 내용을 입력하세요..." onKeypress="if( event.keyCode == 13 )searchClick();">
+        <input type="submit" class="submit-button" value="Search" onclick="searchClick()">
+        </br>
+        </br>
+        <div class="output"/>
+		</br>
+		</br>
+		<div style="text-align: right; position: absolute; left: 2px;">
+			<button id="btn" style="display: none" onclick="nextPage()">다음</button>
+			</br>
+    	</div>
+	</div>
+    <script>
+				var count = 1;
+				function nextPage() {
+					count++;
+					showResult();
+				}
+				function searchClick() {
+					count = 1; // 검색 버튼 클릭 시 count 변수 초기화
+					document.querySelector(".output").style.display = 'block'
+					document.getElementById('btn').style.display = 'block'
+					showResult();
+				} 
+				function showResult() {
+					var query = document.querySelector(".search-box").value;
+					if (query != '') {
+						fetch('/response?q=' + encodeURIComponent(query) + '&page=' + count)
+							.then(response => response.json())
+							.then(data => {
+								var outputBody = document.querySelector(".output");
+								outputBody.innerHTML = '';
+								for (var i = 0; i < data.length; i++) {
+									var row = document.createElement('div');  // row를 루프 내에서 선언
+									var content = document.createElement('a');
+									content.innerHTML = '<p>' + data[i] + '</p>';  // innerHTML로 변경
+									content.setAttribute("href", "https://mediclassics.kr/search/result?search=" + encodeURIComponent(data[i].split('.')[0]));
+									row.appendChild(content);
+									outputBody.appendChild(row);  // 루프 내에서 row를 추가
+								}
+							})
+					}
+				}
+    </script>
+</body>
+</html>

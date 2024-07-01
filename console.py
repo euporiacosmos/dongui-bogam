@@ -4,13 +4,13 @@ import time
 
 embedder = SentenceTransformer("jhgan/ko-sroberta-multitask")
 
-app_started_time = time.time()
+start_time = time.time()
 # dongui_bogam.txt 파일을 읽어서 \n을 기준으로 문장을 나누어 corpus에 저장
-with open('dongui_bogam.txt', 'r', encoding='utf-8') as f:
+with open('dongui-bogam.txt', 'r', encoding='utf-8') as f:
     corpus = f.read().split('\n')
 
 corpus_embeddings = embedder.encode(corpus, convert_to_tensor=True)
-print("소요시간: " + str(round(time.time()-app_started_time, 2)) + "초")
+print("Total spend time: " + str(round(time.time()-start_time, 2)) + "sec")
 
 while True:
     # Query sentences:
