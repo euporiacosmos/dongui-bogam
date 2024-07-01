@@ -55,12 +55,6 @@
         </br>
         </br>
         <div class="output"/>
-		</br>
-		</br>
-		<div style="text-align: right; position: absolute; left: 2px;">
-			<button id="btn" style="display: none" onclick="nextPage()">다음</button>
-			</br>
-    	</div>
 	</div>
     <script>
 				var count = 1;
@@ -71,7 +65,6 @@
 				function searchClick() {
 					count = 1; // 검색 버튼 클릭 시 count 변수 초기화
 					document.querySelector(".output").style.display = 'block'
-					document.getElementById('btn').style.display = 'block'
 					showResult();
 				} 
 				function showResult() {
@@ -85,11 +78,16 @@
 								for (var i = 0; i < data.length; i++) {
 									var row = document.createElement('div');  // row를 루프 내에서 선언
 									var content = document.createElement('a');
-									content.innerHTML = '<p>' + data[i] + '</p>';  // innerHTML로 변경
-									content.setAttribute("href", "https://mediclassics.kr/search/result?search=" + encodeURIComponent(data[i].split('.')[0]));
+									content.innerHTML = '<p>' + data[i] + '</p>';
+									content.setAttribute("href", "https://mediclassics.kr/search/result?search=" + encodeURIComponent(data[i].split('.')[0]/* 문장의 첫 번째 마침표를 기준으로 앞 부분만 찾는다 */));
 									row.appendChild(content);
 									outputBody.appendChild(row);  // 루프 내에서 row를 추가
 								}
+								var button = document.createElement('button');
+								button.setAttribute("onclick", "nextPage()");
+								button.setAttribute("style", "position: relative;left: 2px;bottom: 2px;")
+								button.innerText='다음';
+								outputBody.appendChild(button);
 							})
 					}
 				}
