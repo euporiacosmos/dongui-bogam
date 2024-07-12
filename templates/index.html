@@ -58,6 +58,10 @@
 	</div>
     <script>
 				var count = 1;
+				function previousPage() {
+					count--;
+					showResult();
+				}
 				function nextPage() {
 					count++;
 					showResult();
@@ -75,6 +79,10 @@
 							.then(data => {
 								var outputBody = document.querySelector(".output");
 								outputBody.innerHTML = '';
+								var guide = document.createElement('div');
+								guide.innerHTML = '<p style="font-size: 50%;">더 자세히 알고 싶으면 해당 문장을 클릭하세요...</p>'
+								guide.setAttribute("align", "right");
+								outputBody.appendChild(guide);
 								for (var i = 0; i < data.length; i++) {
 									var row = document.createElement('div');  // row를 루프 내에서 선언
 									var content = document.createElement('a');
@@ -83,11 +91,18 @@
 									row.appendChild(content);
 									outputBody.appendChild(row);  // 루프 내에서 row를 추가
 								}
-								var button = document.createElement('button');
-								button.setAttribute("onclick", "nextPage()");
-								button.setAttribute("style", "position: relative;left: 2px;bottom: 2px;")
-								button.innerText='다음';
-								outputBody.appendChild(button);
+								if (count > 1) {
+									var previous_button = document.createElement('button');
+									previous_button.setAttribute("onclick", "previousPage()");
+									previous_button.setAttribute("style", "position: relative;left: 2px;bottom: 2px;")
+									previous_button.innerText='이전';
+									outputBody.appendChild(previous_button); 
+								}
+								var next_button = document.createElement('button');
+								next_button.setAttribute("onclick", "nextPage()");
+								next_button.setAttribute("style", "position: relative;left: 2px;bottom: 2px;")
+								next_button.innerText='다음';
+								outputBody.appendChild(next_button);
 							})
 					}
 				}

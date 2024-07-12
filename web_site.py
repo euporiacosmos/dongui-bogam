@@ -46,7 +46,9 @@ def response():
         if page == 1:
             curs.execute('INSERT INTO visitor(ipv4, datetime, query, page) VALUES (?, ?, ?, ?)', (ip2long(client_ip), accessed_time, query, page))
         else:
-            curs.execute('UPDATE visitor SET page=? WHERE ipv4=? AND datetime=?', (page, ip2long(client_ip), accessed_time))
+            res = curs.execute('SELECT page FROM visitor WHERE ipv4=? AND datetime=?', (ip2long(client_ip), accessed_time)).fetchone()
+            if res[0] < page:
+                curs.execute('UPDATE visitor SET page=? WHERE ipv4=? AND datetime=?', (page, ip2long(client_ip), accessed_time))
         conn.commit()
     conn.close()
     return jsonify(results)
