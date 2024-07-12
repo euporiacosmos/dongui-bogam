@@ -43,7 +43,9 @@ def response():
     results = [tup[1] for tup in rank_similarity[page*5-5:page*5]]
     with sqlite3.connect('./database/database.sqlite3') as conn:
         curs=conn.cursor()
-        if page == 1:
+        # 돌다리도 두드려 보고 건너자
+        stone_bridge = curs.execute('SELECT * FROM visitor WHERE ipv4=? AND datetime=?', (ip2long(client_ip), accessed_time)).fetchone()
+        if stone_bridge is None: # 있는 지 없는 지 확인하고 INSERT하자
             curs.execute('INSERT INTO visitor(ipv4, datetime, query, page) VALUES (?, ?, ?, ?)', (ip2long(client_ip), accessed_time, query, page))
         else:
             res = curs.execute('SELECT page FROM visitor WHERE ipv4=? AND datetime=?', (ip2long(client_ip), accessed_time)).fetchone()
