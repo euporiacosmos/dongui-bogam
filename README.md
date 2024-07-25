@@ -18,7 +18,7 @@ $ python scrape.py
 ```
 windows
 ```
-PS C:\dongui-bogam\> python scrape.py
+PS C:\dongui-bogam> python scrape.py
 ```
 2. python으로 generate_json.py를 실행합니다. 1~2시간 뒤에 dongui-bogam.json 파일이 생성됩니다.
 
@@ -28,7 +28,7 @@ $ python genrate_json.py
 ```
 windows
 ```
-PS C:\dongui-bogam\> python generate_json.py
+PS C:\dongui-bogam> python generate_json.py
 ```
 3. python으로 web_site.py를 실행합니다. 그리고 [http://localhost:5000](http://localhost:5000)에 접속합니다.
 
@@ -38,5 +38,5 @@ $ python web_site.py
 ```
 windows
 ```
-PS C:\dongui-bogam\> python web_site.py
+PS C:\dongui-bogam> python web_site.py
 ```
